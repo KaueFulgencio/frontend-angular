@@ -1,0 +1,30 @@
+<header class="header">
+    <div class="header-left">
+        <img src="/logo-evo.svg" alt="EVO Logo" class="logo">
+    </div>
+    <div class="header-right">
+        <span class="w12">W12</span>
+    </div>
+</header>
+
+<main class="container">
+    <h1>Cadastro</h1>
+
+    <form (ngSubmit)="salvar()" #form="ngForm">
+
+        <label>NOME:</label>
+        <input type="text" name="nome" [(ngModel)]="usuario.nome" placeholder="Digite seu nome" required />
+
+        <label>E-MAIL:</label>
+        <input type="email" name="email" [(ngModel)]="usuario.email" placeholder="EX: carlos@uol.com.br" required />
+        <span class="erro" *ngIf="emailInvalido">
+            E-mail inválido
+        </span>
+
+        <label>SENHA:</label>
+        <input type="password" name="senha" [(ngModel)]="usuario.senha"
+            placeholder="Sua senha precisa ter pelo menos 8 caracteres" minlength="8" required />
+
+        <button type="submit">SALVAR</button>
+    </form>
+</main>
