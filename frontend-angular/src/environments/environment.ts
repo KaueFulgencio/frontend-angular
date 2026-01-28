@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
   apiUrl: 'https://api.olho.vivo.com.br/v2',
-  apiEmail: 'seu_email@example.com',
-  apiSenha: 'sua_senha'
+  apiEmail: 'kawe1448@gmail.com',
+  apiSenha: '12345678'
 };
