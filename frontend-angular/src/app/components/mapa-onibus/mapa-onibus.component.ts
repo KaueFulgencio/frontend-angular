@@ -9,6 +9,8 @@ import * as L from 'leaflet';
 import { Subscription } from 'rxjs';
 import { OnibusService } from '../../services/onibus.service';
 import { Veiculo } from '../../model/veiculo.model';
+import { HttpClient } from '@angular/common/http';
+import { MockTransitService } from '../../services/mock.service';
 
 @Component({
   selector: 'app-mapa',
@@ -24,6 +26,7 @@ export class MapaOnibusComponent implements AfterViewInit, OnDestroy {
   private map!: L.Map;
   private markers = new Map<number, L.Marker>();
   private sub?: Subscription;
+  private readonly API_URL = 'https://dados.prefeitura.sp.gov.br/api/3/action';
 
   private busIcon = L.icon({
     iconUrl: 'bus.png',
@@ -33,12 +36,13 @@ export class MapaOnibusComponent implements AfterViewInit, OnDestroy {
   });
 
 
-  constructor(private onibusService: OnibusService) { }
+  constructor(private onibusService: MockTransitService, private http: HttpClient) { }
 
   ngAfterViewInit(): void {
     (L.Icon.Default.prototype as any)._getIconUrl = () => '';
     this.initMap();
     this.iniciarMonitoramento();
+    this.buscarDadosAPI();
   }
 
   private initMap(): void {
@@ -52,11 +56,22 @@ export class MapaOnibusComponent implements AfterViewInit, OnDestroy {
   }
 
   private iniciarMonitoramento(): void {
-    this.sub = this.onibusService.monitorar()
+    this.sub = this.onibusService.monitorarVeiculos()
       .subscribe(veiculos => {
+         console.log('Recebidos:', veiculos.length);
+        const idsAtuais = new Set(veiculos.map(v => v.id));
+
         veiculos.forEach(v => this.atualizarOuCriarMarker(v));
+
+        this.markers.forEach((marker, id) => {
+          if (!idsAtuais.has(id)) {
+            this.map.removeLayer(marker);
+            this.markers.delete(id);
+          }
+        });
       });
   }
+
 
   private atualizarOuCriarMarker(v: Veiculo): void {
     const pos: L.LatLngExpression = [v.latitude, v.longitude];
@@ -82,4 +97,12 @@ export class MapaOnibusComponent implements AfterViewInit, OnDestroy {
     this.sub?.unsubscribe();
     this.map?.remove();
   }
+
+  private buscarDadosAPI(): void {
+    this.http.get<any>(`${this.API_URL}/package_search?q=transporte`)
+      .subscribe((data: any) => {
+        console.log(data);
+      });
+  }
+
 }
