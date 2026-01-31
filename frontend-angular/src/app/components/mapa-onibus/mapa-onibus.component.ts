@@ -26,7 +26,7 @@ export class MapaOnibusComponent implements AfterViewInit, OnDestroy {
   private sub?: Subscription;
 
   private busIcon = L.icon({
-    iconUrl: '/assets/bus.png',
+    iconUrl: 'bus.png',
     iconSize: [32, 32],
     iconAnchor: [16, 32],
     popupAnchor: [0, -32]
