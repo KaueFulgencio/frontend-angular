@@ -7,7 +7,6 @@ import {
 } from '@angular/core';
 import * as L from 'leaflet';
 import { Subscription } from 'rxjs';
-import { OnibusService } from '../../services/onibus.service';
 import { Veiculo } from '../../model/veiculo.model';
 import { HttpClient } from '@angular/common/http';
 import { MockTransitService } from '../../services/mock.service';

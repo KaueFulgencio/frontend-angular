@@ -10,7 +10,7 @@ export class MockTransitService {
 
   monitorarVeiculos(): Observable<Veiculo[]> {
     return interval(3000).pipe(
-      startWith(0), 
+      startWith(0),
       map(() => this.atualizarPosicoes())
     );
   }
@@ -40,8 +40,13 @@ export class MockTransitService {
       dataHora: new Date().toISOString()
     }));
   }
-  private randomOffset() {
-    return (Math.random() - 0.5) * 0.01;
+  private randomOffset(raioKm = 10): number {
+    const raioGraus = raioKm / 111;
+
+    const t = Math.random() * 2 * Math.PI;
+    const r = Math.sqrt(Math.random()) * raioGraus;
+
+    return r * Math.cos(t);
   }
 
   private randomSinal() {
